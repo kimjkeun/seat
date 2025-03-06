@@ -190,11 +190,15 @@ textarea#excel-data:focus {
 }
 
 .student-list-container {
-    max-height: 400px;
+    max-height: 500px;
     overflow-y: auto;
     border: 1px solid #ddd;
     border-radius: 6px;
     width: 100%;
+}
+
+#seating-page .student-list-container {
+    max-height: 550px;
 }
 
 table {
@@ -223,6 +227,7 @@ th:nth-child(2), td:nth-child(2) {
 th:nth-child(3), td:nth-child(3) {
     width: 30%;
     text-align: center;
+    padding: 8px;
 }
 
 th {
@@ -439,7 +444,7 @@ tr:hover {
     color: #444;
     margin-bottom: 4px;
     font-weight: 600;
-    background-color: #f5f5f5;
+    background-color: transparent;
     padding: 2px 6px;
     border-radius: 4px;
     display: inline-block;
@@ -460,20 +465,44 @@ tr:hover {
     line-height: 1.2;
 }
 
+/* 삭제 버튼 스타일 개선 */
 .delete-button {
-    background-color: #f44336;
-    padding: 8px 12px;
+    background-color: #ff5252;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 0.9rem;
+    display: inline-block;
+    text-align: center;
+    width: 80%;
+    margin: 0 auto;
 }
 
 .delete-button:hover {
-    background-color: #e53935;
+    background-color: #ff0000;
 }
 
 .select-button {
-    background-color: #2196F3;
-    padding: 8px 12px;
+    background-color: #2196f3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 0.9rem;
+    width: 100%;
 }
 
 .select-button:hover {
-    background-color: #1e88e5;
+    background-color: #0b7dda;
+}
+
+.count-badge {
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: normal;
 }

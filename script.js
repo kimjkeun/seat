@@ -315,13 +315,6 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const actionCell = document.createElement('td');
             
-            const selectBtn = document.createElement('button');
-            selectBtn.className = 'select-button';
-            selectBtn.textContent = '선택';
-            selectBtn.addEventListener('click', function() {
-                selectStudent(student);
-            });
-            
             const deleteBtn = document.createElement('button');
             deleteBtn.className = 'delete-button';
             deleteBtn.textContent = '삭제';
@@ -329,7 +322,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 removeStudent(student.id);
             });
             
-            actionCell.appendChild(selectBtn);
             actionCell.appendChild(deleteBtn);
             
             row.appendChild(idCell);
@@ -341,8 +333,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function updateUnassignedStudentTable() {
-        if (!unassignedStudentTableBody) return;
-        
         unassignedStudentTableBody.innerHTML = '';
         
         for (const student of unassignedStudents) {
@@ -370,6 +360,12 @@ document.addEventListener('DOMContentLoaded', function() {
             row.appendChild(actionCell);
             
             unassignedStudentTableBody.appendChild(row);
+        }
+        
+        // 남은 학생 수 업데이트
+        const studentCountElement = document.getElementById('unassigned-count');
+        if (studentCountElement) {
+            studentCountElement.textContent = unassignedStudents.length;
         }
     }
 
