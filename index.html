@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자리 배치 프로그램</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>자리 배치 프로그램</h1>
+        
+        <!-- 페이지 1: 설정 화면 -->
+        <div id="setup-page" class="page active">
+            <div class="setup-content">
+                <div class="left-panel">
+                    <div class="student-entry">
+                        <h2>학생 정보 입력</h2>
+                        <div class="input-group">
+                            <label for="student-id">학번:</label>
+                            <input type="text" id="student-id">
+                        </div>
+                        <div class="input-group">
+                            <label for="student-name">이름:</label>
+                            <input type="text" id="student-name">
+                        </div>
+                        <button id="add-student">학생 추가</button>
+                        
+                        <div class="excel-input">
+                            <h3>엑셀 데이터 붙여넣기</h3>
+                            <textarea id="excel-data" placeholder="엑셀에서 복사한 학번과 이름 데이터를 여기에 붙여넣으세요. (학번과 이름은 탭으로 구분)"></textarea>
+                            <button id="process-excel">데이터 처리</button>
+                        </div>
+                        
+                        <button id="clear-students">학생 목록 초기화</button>
+                    </div>
+                </div>
+                
+                <div class="right-panel">
+                    <div class="student-list">
+                        <h2>학생 목록</h2>
+                        <div class="student-list-container">
+                            <table id="student-table">
+                                <thead>
+                                    <tr>
+                                        <th>학번</th>
+                                        <th>이름</th>
+                                        <th>액션</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="student-table-body">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="layout-settings-panel">
+                        <h2>레이아웃 설정</h2>
+                        <div class="input-group">
+                            <label for="num-columns">열 수:</label>
+                            <input type="number" id="num-columns" value="5" min="1" max="10">
+                        </div>
+                        <div class="input-group">
+                            <label for="num-rows">행 수:</label>
+                            <input type="number" id="num-rows" value="7" min="1" max="10">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="navigation-buttons">
+                <button id="go-to-seating" class="primary-button">자리 배치 페이지로 이동</button>
+            </div>
+        </div>
+        
+        <!-- 페이지 2: 자리 배치 화면 -->
+        <div id="seating-page" class="page">
+            <div class="control-panel">
+                <div class="control-row">
+                    <div class="button-group">
+                        <h2>좌석 배치 제어</h2>
+                        <div class="button-row">
+                            <button id="assign-next">다음 학생 배치</button>
+                            <button id="assign-all">모든 학생 배치</button>
+                            <button id="reset-seats">자리 초기화</button>
+                        </div>
+                    </div>
+                    <div class="seat-mode">
+                        <h2>배치 모드</h2>
+                        <div class="button-row">
+                            <button id="mode-manual" class="mode-button active">수동 배치</button>
+                            <button id="mode-exclude" class="mode-button">제외 좌석</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="main-content">
+                <div class="classroom-container">
+                    <div class="blackboard">칠판</div>
+                    <div class="classroom">
+                        <div class="window">창문</div>
+                        <div id="seating-chart" class="seating-chart"></div>
+                        <div class="corridor">복도</div>
+                    </div>
+                </div>
+                
+                <div class="right-panel">
+                    <div class="student-list">
+                        <h2>남은 학생 목록</h2>
+                        <div class="student-list-container">
+                            <table id="unassigned-student-table">
+                                <thead>
+                                    <tr>
+                                        <th>학번</th>
+                                        <th>이름</th>
+                                        <th>액션</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="unassigned-student-table-body">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="navigation-buttons">
+                <button id="back-to-setup" class="secondary-button">설정 페이지로 돌아가기</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
