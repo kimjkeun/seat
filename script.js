@@ -8,6 +8,11 @@ document.addEventListener('DOMContentLoaded', function() {
     let unassignedStudents = [];
     let selectedStudent = null;
 
+    // 애니메이션 관련 변수
+    let isAnimating = false;
+    let animationQueue = [];
+    let animationSpeed = 300; // 밀리초 단위
+
     // DOM Elements
     const studentIdInput = document.getElementById('student-id');
     const studentNameInput = document.getElementById('student-name');
@@ -458,34 +463,128 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Get available seats (not assigned and not excluded)
+        // 애니메이션 중이면 중단
+        if (isAnimating) {
+            return;
+        }
+        
+        // 애니메이션 시작 전 UI 준비
+        const assignAllBtn = document.getElementById('assign-all');
+        const originalText = assignAllBtn.textContent;
+        assignAllBtn.textContent = '배치 중...';
+        assignAllBtn.disabled = true;
+        
+        // 배치 가능한 좌석 찾기
         const availableSeats = seats.filter(seat => !seat.assigned && !seat.excluded);
         
         if (availableSeats.length === 0) {
             alert('배치할 수 있는 좌석이 없습니다.');
+            assignAllBtn.textContent = originalText;
+            assignAllBtn.disabled = false;
             return;
         }
         
         if (availableSeats.length < unassignedStudents.length) {
-            alert(`좌석이 부족합니다. ${availableSeats.length}명만 배치됩니다.`);
+            alert(`좌석이 부족합니다. ${availableSeats.length}명만 배치할 수 있습니다.`);
         }
         
-        // Shuffle available seats
+        // 배치할 학생 목록 복사
+        const studentsToAssign = [...unassignedStudents];
+        // 배치할 좌석 목록 복사 및 섞기
         const shuffledSeats = [...availableSeats].sort(() => Math.random() - 0.5);
         
-        // Assign students to seats
-        const assignCount = Math.min(unassignedStudents.length, shuffledSeats.length);
-        for (let i = 0; i < assignCount; i++) {
-            const seat = shuffledSeats[i];
-            const student = unassignedStudents.shift();
+        // 애니메이션 큐 초기화
+        animationQueue = [];
+        
+        // 애니메이션 큐에 학생과 좌석 추가
+        const count = Math.min(studentsToAssign.length, shuffledSeats.length);
+        for (let i = 0; i < count; i++) {
+            animationQueue.push({
+                student: studentsToAssign[i],
+                seat: shuffledSeats[i]
+            });
+        }
+        
+        // 애니메이션 시작
+        isAnimating = true;
+        
+        // 애니메이션 효과음 재생
+        playSound('start');
+        
+        // 배치 애니메이션 시작
+        processAnimationQueue(assignAllBtn, originalText);
+    }
+    
+    function processAnimationQueue(button, originalText) {
+        if (animationQueue.length === 0) {
+            // 애니메이션 종료
+            isAnimating = false;
+            button.textContent = originalText;
+            button.disabled = false;
             
+            // 완료 효과음 재생
+            playSound('complete');
+            
+            // 남은 학생 목록 업데이트
+            updateUnassignedStudentTable();
+            return;
+        }
+        
+        // 다음 배치할 학생과 좌석
+        const next = animationQueue.shift();
+        const { student, seat } = next;
+        
+        // 좌석에 하이라이트 효과 추가
+        seat.element.classList.add('highlight');
+        
+        // 효과음 재생
+        playSound('assign');
+        
+        // 일정 시간 후 학생 배치 및 다음 애니메이션 진행
+        setTimeout(() => {
+            // 좌석에 학생 배치
             seat.assigned = true;
             seat.studentId = student.id;
             seat.studentName = student.name;
             updateSeatDisplay(seat);
+            
+            // 하이라이트 효과 제거
+            seat.element.classList.remove('highlight');
+            
+            // 배치된 학생 제거
+            unassignedStudents = unassignedStudents.filter(s => s.id !== student.id);
+            
+            // 다음 애니메이션 진행
+            processAnimationQueue(button, originalText);
+        }, animationSpeed);
+    }
+    
+    function playSound(type) {
+        // 효과음 재생 함수
+        let sound;
+        
+        switch(type) {
+            case 'start':
+                sound = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==');
+                sound.volume = 0.5;
+                break;
+            case 'assign':
+                // 간단한 효과음 (비프음)
+                sound = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==');
+                sound.volume = 0.3;
+                break;
+            case 'complete':
+                sound = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==');
+                sound.volume = 0.7;
+                break;
         }
         
-        updateUnassignedStudentTable();
+        // 효과음 재생 시도 (브라우저에 따라 작동하지 않을 수 있음)
+        try {
+            sound.play().catch(e => console.log('효과음 재생 실패:', e));
+        } catch (e) {
+            console.log('효과음 재생 실패:', e);
+        }
     }
 
     function resetSeats() {
