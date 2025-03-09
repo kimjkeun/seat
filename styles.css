@@ -317,7 +317,8 @@ tr:hover {
     display: flex;
     gap: 30px;
     margin-bottom: 25px;
-    height: 650px;
+    height: auto;
+    min-height: 650px;
 }
 
 .classroom-container {
@@ -329,8 +330,9 @@ tr:hover {
     padding: 20px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     min-width: 0;
-    height: 100%;
-    overflow: hidden;
+    height: auto;
+    min-height: 100%;
+    overflow: visible;
 }
 
 .blackboard {
@@ -352,9 +354,10 @@ tr:hover {
     display: flex;
     width: 100%;
     flex: 1;
-    height: calc(100% - 75px);
+    height: auto;
+    min-height: calc(100% - 75px);
     position: relative;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .window {
@@ -398,7 +401,8 @@ tr:hover {
     box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.1);
     border-radius: 4px;
     min-width: 0;
-    height: 100%;
+    height: auto;
+    min-height: 100%;
     overflow: visible;
 }
 
